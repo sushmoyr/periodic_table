@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:periodic_table/providers/element_providers.dart';
+import 'package:periodic_table/screens/home.dart';
 import 'package:periodic_table/screens/onboarding_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,20 +41,7 @@ class MyApp extends StatelessWidget {
           colorSchemeSeed: Colors.blue,
           scaffoldBackgroundColor: Color(0xFF070706),
         ),
-        home: (settingsString != null) ? HomeScreen() : OnBoardingScreen(),
-      ),
-    );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Text('Home Screen'),
+        home: (settingsString != null) ? HomePage() : OnBoardingScreen(),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:periodic_table/providers/element_providers.dart';
+import 'package:periodic_table/screens/home.dart';
 import 'package:periodic_table/widgets/element_text.dart';
 import 'package:provider/provider.dart';
 
@@ -14,9 +15,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   bool hasError = false;
 
+  late ValueNotifier<bool> loading;
+
   @override
   void initState() {
     _textEditingController.addListener(_textListener);
+    loading = ValueNotifier(context.watch<AppSettings>().loading);
     super.initState();
   }
 
@@ -43,42 +47,54 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ElementText(
-                text: 'Periodic',
-                letterSpacing: 1,
-                style: Theme.of(context).textTheme.displaySmall,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ElementText(
+                    text: 'Periodic',
+                    letterSpacing: 1,
+                    style: Theme.of(context).textTheme.displaySmall,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 42, top: 8),
+                    child: ElementText(
+                      text: 'Table',
+                      style: Theme.of(context).textTheme.displaySmall,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                  const Spacer(),
+                  TextField(
+                    controller: _textEditingController,
+                    enabled: !context.watch<AppSettings>().loading,
+                    decoration: InputDecoration(
+                        hintText: 'Enter Your name',
+                        errorText: hasError ? 'Name Can not be empty' : null),
+                  ),
+                  const SizedBox(height: 16),
+                  Align(
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                      onPressed: context.watch<AppSettings>().loading
+                          ? null
+                          : _handleSubmit,
+                      child: const Text('Set Name'),
+                    ),
+                  ),
+                  const Spacer(),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 42, top: 8),
-                child: ElementText(
-                  text: 'Table',
-                  style: Theme.of(context).textTheme.displaySmall,
-                  letterSpacing: 1,
-                ),
-              ),
-              const Spacer(),
-              TextField(
-                controller: _textEditingController,
-                decoration: InputDecoration(
-                    hintText: 'Enter Your name',
-                    errorText: hasError ? 'Name Can not be empty' : null),
-              ),
-              const SizedBox(height: 16),
-              Align(
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  onPressed: _handleSubmit,
-                  child: const Text('Set Name'),
-                ),
-              ),
-              const Spacer(),
-            ],
-          ),
+            ),
+            (context.watch<AppSettings>().loading == true)
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Container(),
+          ],
         ),
       ),
     );
@@ -87,17 +103,29 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   void _handleSubmit() async {
     var text = _textEditingController.text;
     if (text.isEmpty) {
-      _showBanner();
+      _showBanner('Name can\'t be empty');
       return;
     }
 
-    context.read<AppSettings>().setName(_textEditingController.text);
+    var result =
+        await context.read<AppSettings>().setName(_textEditingController.text);
+
+    if (result) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomePage(),
+        ),
+      );
+    } else {
+      _showBanner('An error occurred. Try again');
+    }
   }
 
-  void _showBanner() {
+  void _showBanner(String message) {
     ScaffoldMessenger.of(context).showMaterialBanner(
       MaterialBanner(
-        content: Text('Name can\'t be empty'),
+        content: Text(message),
         actions: [
           TextButton(
             onPressed: () {

@@ -44,20 +44,37 @@ class AppSettings with ChangeNotifier {
     );
   }
 
-  void _save() {
+  Future<bool> _save() async {
     Settings settings = _state.settings!;
 
     String json = jsonEncode(settings.toJson());
-    final sharedPreferences = SharedPreferences.getInstance();
-    sharedPreferences.then(
-      (pref) {
-        pref.setString(settingsKey, json);
-      },
-    );
+    final pref = await SharedPreferences.getInstance();
+    bool complete = await pref.setString(settingsKey, json);
+    return complete;
   }
 
-  void setName(String name) {
-    print('Set name to $name');
-    //TODO call _save()
+  bool loading = false;
+
+  void changeLoadingStatus(bool status) {
+    loading = status;
+    notifyListeners();
+  }
+
+  Future<bool> setName(String name) async {
+    changeLoadingStatus(true);
+    if (_state.settings == null) {
+      Settings settings = Settings(name: name, lang: 'en');
+      _state = _state.copyWith(settings);
+    } else {
+      _state = _state.copyWith(
+        _state.settings?.copyWith(
+          name: name,
+        ),
+      );
+    }
+
+    changeLoadingStatus(false);
+
+    return _save();
   }
 }
