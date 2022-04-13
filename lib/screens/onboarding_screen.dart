@@ -20,7 +20,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   void initState() {
     _textEditingController.addListener(_textListener);
-    loading = ValueNotifier(context.watch<AppSettings>().loading);
+    loading = ValueNotifier(false);
     super.initState();
   }
 
@@ -45,6 +45,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    loading = ValueNotifier(context.watch<AppSettings>().loading);
     return Scaffold(
       body: SafeArea(
         child: Stack(

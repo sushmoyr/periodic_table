@@ -26,6 +26,7 @@ class ElementText extends StatelessWidget {
     String rest = text.substring(1);
     return [
       _getElementLetter(first),
+      SizedBox(width: letterSpacing),
       Text(
         rest,
         style: style,
@@ -42,7 +43,7 @@ class ElementText extends StatelessWidget {
         padding: EdgeInsets.symmetric(
             horizontal: boxPadding + 2, vertical: boxPadding),
         child: Text(
-          letter,
+          letter.toUpperCase(),
           style: style?.copyWith(height: 1),
         ),
       ),

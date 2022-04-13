@@ -5,7 +5,10 @@ import 'package:periodic_table/screens/onboarding_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'utils/constants.dart';
+
 String? settingsString;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -39,7 +42,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           brightness: Brightness.dark,
           colorSchemeSeed: Colors.blue,
-          scaffoldBackgroundColor: Color(0xFF070706),
+          scaffoldBackgroundColor: scaffoldBackgroundColor,
         ),
         home: (settingsString != null) ? HomePage() : OnBoardingScreen(),
       ),
