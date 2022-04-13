@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:periodic_table/data/daily_element.dart';
 import 'package:periodic_table/providers/element_providers.dart';
 import 'package:periodic_table/screens/home.dart';
 import 'package:periodic_table/screens/onboarding_screen.dart';
@@ -41,9 +42,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.dark,
-          colorSchemeSeed: Colors.orange,
-          scaffoldBackgroundColor: scaffoldBackgroundColor,
-          cardColor: cardBackgroundColor,
+          colorSchemeSeed: Colors.cyan,
+          scaffoldBackgroundColor: surfaceColor,
+          cardColor: elevatedSurfaceColor,
           iconTheme: const IconThemeData(color: iconColor),
         ),
         home: (settingsString != null) ? HomePage() : OnBoardingScreen(),

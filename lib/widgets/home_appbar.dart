@@ -29,7 +29,7 @@ class DefaultAppBar extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Padding(
         padding: EdgeInsets.only(
-          top: viewPadding,
+          top: 16,
           bottom: 8,
           left: 16,
         ),

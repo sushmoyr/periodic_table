@@ -13,12 +13,14 @@ class SliverCard extends StatelessWidget {
     this.cornerRadius = 0,
     this.fillColor,
     required this.child,
+    this.alignment = Alignment.center,
   }) : super(key: key);
 
   final SliverCardType type;
   final double cornerRadius;
   final Color? fillColor;
   final Widget child;
+  final Alignment alignment;
 
   factory SliverCard.outlined({
     Key? key,
@@ -38,16 +40,18 @@ class SliverCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Card(
-        borderOnForeground: true,
-        shape: RoundedRectangleBorder(
-          side: (type == SliverCardType.outlined)
-              ? const BorderSide(color: elementTextBorderColor)
-              : BorderSide.none,
-          borderRadius: BorderRadius.circular(cornerRadius),
+      child: Align(
+        alignment: alignment,
+        child: Container(
+          decoration: BoxDecoration(
+            border: (type == SliverCardType.outlined)
+                ? Border.all(color: elementTextBorderColor)
+                : null,
+            color: fillColor ?? Theme.of(context).cardColor,
+            borderRadius: BorderRadius.circular(cornerRadius),
+          ),
+          child: child,
         ),
-        color: fillColor,
-        child: child,
       ),
     );
   }

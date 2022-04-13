@@ -14,7 +14,7 @@ class SliverSearchbar extends StatelessWidget {
           onTap: onSearchClick,
           child: Material(
             type: MaterialType.card,
-            color: cardBackgroundColor,
+            color: elevatedSurfaceColor,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(

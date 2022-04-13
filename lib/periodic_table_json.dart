@@ -1,4 +1,4 @@
-var periodicTableJson = {
+Map<String, dynamic> periodicTableJson = {
   "elements": [
     {
       "name": "Hydrogen",
