@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:periodic_table/providers/app_settings.dart';
 import 'package:periodic_table/widgets/home_appbar.dart';
+import 'package:periodic_table/widgets/sliver_card.dart';
 import 'package:periodic_table/widgets/sliver_searchbar.dart';
 import 'package:provider/provider.dart';
 
@@ -25,6 +26,12 @@ class HomePage extends StatelessWidget {
           ),
           SliverSearchbar(
             onSearchClick: _navigateToSearchPage,
+          ),
+          SliverCard.outlined(
+            child: SizedBox(
+              width: double.infinity,
+              height: 160,
+            ),
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:periodic_table/utils/constants.dart';
 
 class ElementText extends StatelessWidget {
   const ElementText({
@@ -37,14 +38,18 @@ class ElementText extends StatelessWidget {
   _getElementLetter(String letter) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.all(color: borderColor ?? Colors.white),
+        border: Border.all(color: borderColor ?? elementTextBorderColor),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: boxPadding + 2, vertical: boxPadding),
         child: Text(
           letter.toUpperCase(),
-          style: style?.copyWith(height: 1),
+          style: style?.copyWith(
+            height: 1,
+            color: borderColor ?? elementTextBorderColor,
+            fontWeight: FontWeight.w300,
+          ),
         ),
       ),
     );

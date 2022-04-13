@@ -41,8 +41,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.dark,
-          colorSchemeSeed: Colors.blue,
+          colorSchemeSeed: Colors.orange,
           scaffoldBackgroundColor: scaffoldBackgroundColor,
+          cardColor: cardBackgroundColor,
+          iconTheme: const IconThemeData(color: iconColor),
         ),
         home: (settingsString != null) ? HomePage() : OnBoardingScreen(),
       ),
