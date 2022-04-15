@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:periodic_table/data/atom.dart';
 import 'package:periodic_table/data/daily_element.dart';
-import 'package:periodic_table/utils/constants.dart';
 import 'package:periodic_table/widgets/element_cell.dart';
-import 'package:periodic_table/widgets/sliver_card.dart';
+import 'package:periodic_table/widgets/app_card.dart';
 
 class ElementOfTheDay extends StatefulWidget {
   const ElementOfTheDay({Key? key}) : super(key: key);
@@ -23,9 +22,9 @@ class _ElementOfTheDayState extends State<ElementOfTheDay> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      sliver: SliverCard(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      child: AppCard(
         alignment: Alignment.centerLeft,
         cornerRadius: 36,
         child: SizedBox(
@@ -38,7 +37,7 @@ class _ElementOfTheDayState extends State<ElementOfTheDay> {
                 if (snapshot.hasData) {
                   return _buildDataWidget(snapshot.data!);
                 } else if (snapshot.hasError) {
-                  return Center(
+                  return const Center(
                     child: Text('An error occurred'),
                   );
                 } else {

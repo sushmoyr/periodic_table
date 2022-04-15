@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:periodic_table/utils/constants.dart';
 import 'package:periodic_table/widgets/element_text.dart';
+import 'package:periodic_table/widgets/fade_in_slider.dart';
 
 class DefaultAppBar extends StatelessWidget {
   const DefaultAppBar({
@@ -12,6 +14,7 @@ class DefaultAppBar extends StatelessWidget {
     this.letterSpacing = 4,
     this.action,
     this.onActionClicked,
+    this.animationDuration,
   }) : super(key: key);
   final String title;
   final String? subtitle;
@@ -21,42 +24,56 @@ class DefaultAppBar extends StatelessWidget {
   final double letterSpacing;
   final Widget? action;
   final VoidCallback? onActionClicked;
+  final Duration? animationDuration;
 
   @override
   Widget build(BuildContext context) {
-    double viewPadding = MediaQuery.of(context).viewPadding.top;
-
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.only(
-          top: 16,
-          bottom: 8,
-          left: 16,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  selectWidget(designTitle, title),
-                  const SizedBox(height: 8),
-                  if (subtitle != null) selectWidget(designSubtitle, subtitle!),
-                ],
+    return Padding(
+      padding: EdgeInsets.only(
+        top: 16,
+        bottom: 8,
+        left: 16,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                FadeInSlider(
+                  child: selectWidget(designTitle, title),
+                  duration: animationDuration,
+                  curve: const Interval(
+                    0,
+                    0.8,
+                    curve: Curves.fastOutSlowIn,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                if (subtitle != null)
+                  FadeInSlider(
+                    child: selectWidget(designSubtitle, subtitle!),
+                    duration: animationDuration,
+                    curve: const Interval(
+                      0.6,
+                      1.0,
+                      curve: Curves.fastOutSlowIn,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          if (action != null)
+            Padding(
+              padding: const EdgeInsets.only(right: 16, left: 8),
+              child: InkWell(
+                child: action,
+                onTap: onActionClicked,
               ),
             ),
-            if (action != null)
-              Padding(
-                padding: EdgeInsets.only(right: 16, left: 8),
-                child: InkWell(
-                  child: action,
-                  onTap: onActionClicked,
-                ),
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

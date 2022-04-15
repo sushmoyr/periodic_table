@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:periodic_table/data/daily_element.dart';
 import 'package:periodic_table/providers/app_settings.dart';
-import 'package:periodic_table/providers/element_list.dart';
+import 'package:periodic_table/screens/explore_card.dart';
 import 'package:periodic_table/utils/constants.dart';
 import 'package:periodic_table/widgets/element_of_the_day.dart';
-import 'package:periodic_table/widgets/element_text.dart';
+import 'package:periodic_table/widgets/fade_in.dart';
+import 'package:periodic_table/widgets/fade_in_slider.dart';
 import 'package:periodic_table/widgets/home_appbar.dart';
-import 'package:periodic_table/widgets/sliver_card.dart';
-import 'package:periodic_table/widgets/sliver_searchbar.dart';
+import 'package:periodic_table/widgets/app_searchbar.dart';
 import 'package:provider/provider.dart';
+
+List<Duration> renderDelays = List.generate(5, (index) {
+  var d = defaultDuration * index;
+  print(d);
+  return d;
+});
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,113 +22,87 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     var name = context.watch<AppSettings>().state.settings?.name;
 
+    var delay = Duration(milliseconds: 100);
+
     return Scaffold(
       body: SafeArea(
-        child: CustomScrollView(
+        child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          slivers: [
-            DefaultAppBar(
-              title: 'Hello',
-              subtitle: name,
-              style: Theme.of(context).textTheme.displaySmall,
-              action: const Icon(
-                Icons.settings,
-                color: Colors.white70,
-              ),
-            ),
-            SliverSearchbar(
-              onSearchClick: _navigateToSearchPage,
-            ),
-            ElementOfTheDay(),
-            SliverPadding(
-              padding: EdgeInsets.only(
-                left: 24,
-                bottom: 16,
-              ),
-              sliver: SliverToBoxAdapter(
-                child: Text(
-                  'Explore',
-                  style: Theme.of(context).textTheme.headlineMedium,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DefaultAppBar(
+                title: 'Hello',
+                subtitle: name,
+                style: Theme.of(context).textTheme.displaySmall,
+                action: const Icon(
+                  Icons.settings,
+                  color: Colors.white70,
                 ),
               ),
-            ),
-            SliverPadding(
-              padding: const EdgeInsets.only(left: 24, right: 24, bottom: 60),
-              sliver: SliverGrid.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 24,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: elevatedSurfaceColor,
-                        borderRadius: BorderRadius.circular(16)),
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          ElementText(
-                            text: 'Periodic',
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 28),
-                            child: ElementText(
-                              text: 'Table',
-                              style: Theme.of(context).textTheme.headlineSmall,
-                            ),
-                          ),
-                          Spacer(),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: Colors.lightBlue,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: elevatedSurfaceColor,
-                        borderRadius: BorderRadius.circular(16)),
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          ElementText(
-                            text: 'Element',
-                            style: Theme.of(context).textTheme.headlineSmall,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 28),
-                            child: ElementText(
-                              text: 'List',
-                              style: Theme.of(context).textTheme.headlineSmall,
-                            ),
-                          ),
-                          Spacer(),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: Colors.lightBlue,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-                childAspectRatio: 1,
+              FadeIn(
+                delay: Duration(milliseconds: 500),
+                child: Searchbar(
+                  onSearchClick: _navigateToSearchPage,
+                ),
+                curve: Interval(0.5, 1, curve: Curves.fastOutSlowIn),
               ),
-            ),
-          ],
+              FadeInSlider(
+                child: ElementOfTheDay(),
+                delay: Duration(milliseconds: 700),
+              ),
+              FadeIn(
+                delay: Duration(milliseconds: 900),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 24,
+                    bottom: 16,
+                  ),
+                  child: Text(
+                    'Explore',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 24, right: 24, bottom: 60),
+                child: GridView.count(
+                  shrinkWrap: true,
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 24,
+                  children: [
+                    FadeInSlider(
+                      delay: Duration(milliseconds: 700),
+                      child: ExploreCard(
+                        title: 'Periodic',
+                        subtitle: 'Table',
+                        onTap: onPeriodicTable,
+                      ),
+                      direction: FadeInSliderDirection.fromBottom,
+                    ),
+                    FadeInSlider(
+                      delay: Duration(milliseconds: 700),
+                      child: ExploreCard(
+                        title: 'Element',
+                        subtitle: 'List',
+                        onTap: onElementList,
+                      ),
+                      direction: FadeInSliderDirection.fromBottom,
+                    ),
+                  ],
+                  childAspectRatio: 1,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
+
+  void onPeriodicTable() {}
+
+  void onElementList() {}
 
   void _navigateToSearchPage() {
     DateTime dateTime = DateTime.now();
@@ -132,3 +111,11 @@ class HomePage extends StatelessWidget {
     print('Navigate to search at ${dateTime.toIso8601String()}\n');
   }
 }
+
+/*
+
+
+
+
+
+ */
