@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:periodic_table/providers/app_settings.dart';
-import 'package:periodic_table/screens/explore_card.dart';
-import 'package:periodic_table/utils/constants.dart';
+import 'package:periodic_table/screens/periodic_table_screen.dart';
+import 'package:periodic_table/utils/helpers.dart';
+import 'package:periodic_table/widgets/explore_card.dart';
 import 'package:periodic_table/widgets/element_of_the_day.dart';
 import 'package:periodic_table/widgets/fade_in.dart';
 import 'package:periodic_table/widgets/fade_in_slider.dart';
@@ -9,20 +10,12 @@ import 'package:periodic_table/widgets/home_appbar.dart';
 import 'package:periodic_table/widgets/app_searchbar.dart';
 import 'package:provider/provider.dart';
 
-List<Duration> renderDelays = List.generate(5, (index) {
-  var d = defaultDuration * index;
-  print(d);
-  return d;
-});
-
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var name = context.watch<AppSettings>().state.settings?.name;
-
-    var delay = Duration(milliseconds: 100);
 
     return Scaffold(
       body: SafeArea(
@@ -72,11 +65,18 @@ class HomePage extends StatelessWidget {
                   crossAxisSpacing: 24,
                   children: [
                     FadeInSlider(
-                      delay: Duration(milliseconds: 700),
+                      delay: const Duration(milliseconds: 700),
                       child: ExploreCard(
                         title: 'Periodic',
                         subtitle: 'Table',
-                        onTap: onPeriodicTable,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            buildPage(
+                              page: const PeriodicTableScreen(),
+                            ),
+                          );
+                        },
                       ),
                       direction: FadeInSliderDirection.fromBottom,
                     ),
@@ -85,7 +85,14 @@ class HomePage extends StatelessWidget {
                       child: ExploreCard(
                         title: 'Element',
                         subtitle: 'List',
-                        onTap: onElementList,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            buildPage(
+                              page: const PeriodicTableScreen(),
+                            ),
+                          );
+                        },
                       ),
                       direction: FadeInSliderDirection.fromBottom,
                     ),
@@ -99,8 +106,6 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
-  void onPeriodicTable() {}
 
   void onElementList() {}
 

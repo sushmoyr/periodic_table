@@ -15,6 +15,7 @@ class DefaultAppBar extends StatelessWidget {
     this.action,
     this.onActionClicked,
     this.animationDuration,
+    this.padding,
   }) : super(key: key);
   final String title;
   final String? subtitle;
@@ -25,15 +26,17 @@ class DefaultAppBar extends StatelessWidget {
   final Widget? action;
   final VoidCallback? onActionClicked;
   final Duration? animationDuration;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-        top: 16,
-        bottom: 8,
-        left: 16,
-      ),
+      padding: padding ??
+          const EdgeInsets.only(
+            top: 16,
+            bottom: 8,
+            left: 16,
+          ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

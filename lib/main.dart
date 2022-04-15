@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:periodic_table/data/daily_element.dart';
 import 'package:periodic_table/providers/element_providers.dart';
 import 'package:periodic_table/screens/home.dart';
 import 'package:periodic_table/screens/onboarding_screen.dart';
+import 'package:periodic_table/screens/periodic_table_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,7 +49,9 @@ class MyApp extends StatelessWidget {
           cardColor: elevatedSurfaceColor,
           iconTheme: const IconThemeData(color: iconColor),
         ),
-        home: (settingsString != null) ? HomePage() : OnBoardingScreen(),
+        home: (settingsString != null)
+            ? PeriodicTableScreen()
+            : OnBoardingScreen(),
       ),
     );
   }
