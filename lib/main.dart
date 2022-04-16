@@ -49,9 +49,7 @@ class MyApp extends StatelessWidget {
           cardColor: elevatedSurfaceColor,
           iconTheme: const IconThemeData(color: iconColor),
         ),
-        home: (settingsString != null)
-            ? PeriodicTableScreen()
-            : OnBoardingScreen(),
+        home: (settingsString != null) ? HomePage() : OnBoardingScreen(),
       ),
     );
   }

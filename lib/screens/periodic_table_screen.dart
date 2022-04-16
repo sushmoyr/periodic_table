@@ -168,10 +168,13 @@ class _PeriodicTableScreenState extends State<PeriodicTableScreen> {
             ScaleIn(
               child: Padding(
                 padding: const EdgeInsets.all(6),
-                child: ElementCell(
-                  size: const Size(112, 150),
-                  atom: element,
-                  filterType: filterType,
+                child: Hero(
+                  tag: element.name!,
+                  child: ElementCell(
+                    size: elementCellSize,
+                    atom: element,
+                    filterType: filterType,
+                  ),
                 ),
               ),
             ),

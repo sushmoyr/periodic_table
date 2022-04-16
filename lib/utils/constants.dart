@@ -11,3 +11,7 @@ TextStyle headerText = const TextStyle(
 );
 
 Duration defaultDuration = Duration(milliseconds: 700);
+
+const Size elementCellSize = Size(112, 150);
+const SizedBox verticalGap8 = SizedBox(height: 8);
+const SizedBox verticalGap16 = SizedBox(height: 16);

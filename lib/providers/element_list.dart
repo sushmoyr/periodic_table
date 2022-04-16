@@ -9,21 +9,35 @@ class ElementListState {
   double maxElectronAffinity = double.negativeInfinity;
   double minElectronAffinity = double.infinity;
 
+  Set<double> boilingPointsSet = {};
+  Set<double> meltingPointSet = {};
+  Set<double> electronNegativitySet = {};
+  Set<double> electronAffinitySet = {};
+  //Set<double> boilingPointsSet = {};
+
   ElementListState({
     required this.atoms,
-  });
+  }) {
+    setParameterSet();
+  }
 
-  calculateMinMax() {
+  setParameterSet() {
     for (Atom atom in atoms) {
-      maxElectronAffinity = max<num>(
-        maxElectronAffinity,
-        atom.electronAffinity ?? double.negativeInfinity,
-      ).toDouble();
+      if (atom.boil != null) {
+        boilingPointsSet.add(atom.boil!.toDouble());
+      }
 
-      minElectronAffinity = min<num>(
-        minElectronAffinity,
-        atom.electronAffinity ?? double.infinity,
-      ).toDouble();
+      if (atom.melt != null) {
+        meltingPointSet.add(atom.melt!.toDouble());
+      }
+
+      if (atom.electronegativityPauling != null) {
+        electronNegativitySet.add(atom.electronegativityPauling!.toDouble());
+      }
+
+      if (atom.electronAffinity != null) {
+        electronAffinitySet.add(atom.electronAffinity!.toDouble());
+      }
     }
   }
 
@@ -34,7 +48,7 @@ class ElementListState {
       elements.add(Atom.fromJson(element));
     }
 
-    return ElementListState(atoms: elements)..calculateMinMax();
+    return ElementListState(atoms: elements);
   }
 
   ElementListState copyWith({
