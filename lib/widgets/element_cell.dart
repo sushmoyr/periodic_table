@@ -86,7 +86,7 @@ class ElementCell extends StatelessWidget {
     return AnimatedContainer(
       duration: defaultDuration,
       decoration: BoxDecoration(
-        color: cellColor,
+        color: cellColor ?? surfaceColor,
         border: canHaveBorder
             ? Border.all(
                 color: (filterType == CellFilterType.none)
@@ -98,46 +98,44 @@ class ElementCell extends StatelessWidget {
       ),
       child: SizedBox.fromSize(
         size: size,
-        child: Material(
-          child: InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                buildPage(
-                  page: ElementDetails(atom: atom),
-                  type: PageTransitionType.fade,
-                ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      atom.number.toString(),
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                  ),
-                  Text(
-                    atom.symbol!,
-                    style: Theme.of(context).textTheme.headlineLarge!.copyWith(
-                          color: canHaveBorder ? borderColor : Colors.white,
-                        ),
-                  ),
-                  Text(
-                    atom.name!,
-                    style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                          color: canHaveBorder ? borderColor : Colors.white,
-                        ),
-                  ),
-                  Text(
-                    atom.atomicMass!.toStringAsFixed(2),
-                    style: Theme.of(context).textTheme.caption,
-                  )
-                ],
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              buildPage(
+                page: ElementDetails(atom: atom),
+                type: PageTransitionType.fade,
               ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    atom.number.toString(),
+                    style: Theme.of(context).textTheme.caption,
+                  ),
+                ),
+                Text(
+                  atom.symbol!,
+                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                        color: canHaveBorder ? borderColor : Colors.white,
+                      ),
+                ),
+                Text(
+                  atom.name!,
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                        color: canHaveBorder ? borderColor : Colors.white,
+                      ),
+                ),
+                Text(
+                  atom.atomicMass!.toStringAsFixed(2),
+                  style: Theme.of(context).textTheme.caption,
+                )
+              ],
             ),
           ),
         ),
@@ -153,7 +151,7 @@ class ElementCell extends StatelessWidget {
       if (index != null) {
         double fraction = index / length;
         //print(fraction);
-        return color.withOpacity(fraction.clamp(0.1, 1));
+        return color.withOpacity(1 - fraction.clamp(0.1, 1));
       }
     }
     return null;
@@ -161,8 +159,9 @@ class ElementCell extends StatelessWidget {
 
   int? _findIndex(Set<double> set, double value) {
     var index = set.toList().indexOf(value);
-    if (index != null) {
+    if (index != -1) {
       return index;
     }
+    return null;
   }
 }

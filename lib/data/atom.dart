@@ -12,19 +12,19 @@ class Atom {
   num? number;
   num? period;
   String? phase;
-  String? source;
-  String? spectralImg;
+  String? source; //Todo: Use it
+  String? spectralImg; //Todo: Use it
   String? summary;
   String? symbol;
   num? xPos;
   num? yPos;
-  List<int>? shells;
-  String? electronConfiguration;
-  String? electronConfigurationSemantic;
-  num? electronAffinity;
-  num? electronegativityPauling;
-  List<num>? ionizationEnergies;
-  String? cpkHex;
+  List<num>? shells; //Todo: Use it
+  String? electronConfiguration; //Todo: Use it
+  String? electronConfigurationSemantic; //Todo: Use it
+  num? electronAffinity; //Todo: Use it
+  num? electronegativityPauling; //Todo: Use it
+  List<num>? ionizationEnergies; //Todo: Use it
+  String? cpkHex; //Todo: Use it
 
   Atom(
       {this.name = '',
@@ -74,12 +74,12 @@ class Atom {
     symbol = json['symbol'];
     xPos = json['xpos'];
     yPos = json['ypos'];
-    shells = json['shells'].cast<int>();
+    shells = List<num>.from(json['shells']);
     electronConfiguration = json['electron_configuration'];
     electronConfigurationSemantic = json['electron_configuration_semantic'];
     electronAffinity = json['electron_affinity'];
     electronegativityPauling = json['electronegativity_pauling'];
-    ionizationEnergies = json['ionization_energies'].cast<int>();
+    ionizationEnergies = List<num>.from(json['ionization_energies']);
     cpkHex = json['cpk-hex'];
   }
 

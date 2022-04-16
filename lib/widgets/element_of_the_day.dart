@@ -37,6 +37,8 @@ class _ElementOfTheDayState extends State<ElementOfTheDay> {
                 if (snapshot.hasData) {
                   return _buildDataWidget(snapshot.data!);
                 } else if (snapshot.hasError) {
+                  print(snapshot.error);
+                  debugPrintStack(stackTrace: snapshot.stackTrace);
                   return const Center(
                     child: Text('An error occurred'),
                   );
@@ -60,7 +62,11 @@ class _ElementOfTheDayState extends State<ElementOfTheDay> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ElementCell(size: Size(100, 140), atom: element),
+          ElementCell(
+            size: Size(100, 140),
+            atom: element,
+            filterType: CellFilterType.normal,
+          ),
           Text(
             element.summary ?? '',
             maxLines: 3,
