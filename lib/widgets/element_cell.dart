@@ -86,7 +86,7 @@ class ElementCell extends StatelessWidget {
     return AnimatedContainer(
       duration: defaultDuration,
       decoration: BoxDecoration(
-        color: cellColor ?? surfaceColor,
+        color: cellColor,
         border: canHaveBorder
             ? Border.all(
                 color: (filterType == CellFilterType.none)

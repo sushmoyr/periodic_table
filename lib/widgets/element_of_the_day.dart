@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:periodic_table/data/atom.dart';
 import 'package:periodic_table/data/daily_element.dart';
+import 'package:periodic_table/screens/element_details.dart';
+import 'package:periodic_table/utils/helpers.dart';
 import 'package:periodic_table/widgets/element_cell.dart';
 import 'package:periodic_table/widgets/app_card.dart';
 
@@ -23,36 +25,52 @@ class _ElementOfTheDayState extends State<ElementOfTheDay> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-      child: AppCard(
-        alignment: Alignment.centerLeft,
-        cornerRadius: 36,
-        child: SizedBox(
-          width: 240,
-          child: AspectRatio(
-            aspectRatio: 2 / 3,
-            child: FutureBuilder<Atom>(
-              future: element,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return _buildDataWidget(snapshot.data!);
-                } else if (snapshot.hasError) {
-                  print(snapshot.error);
-                  debugPrintStack(stackTrace: snapshot.stackTrace);
-                  return const Center(
-                    child: Text('An error occurred'),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
-            ),
-          ),
-        ),
-      ),
-    );
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        child: FutureBuilder<Atom>(
+          future: element,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return AppCard(
+                alignment: Alignment.centerLeft,
+                onTap: (snapshot.data != null)
+                    ? () {
+                        Navigator.of(context).push(
+                          buildPage(
+                            page: ElementDetails(atom: snapshot.data!),
+                            type: PageTransitionType.fade,
+                          ),
+                        );
+                      }
+                    : null,
+                cornerRadius: 36,
+                child: SizedBox(
+                  width: 240,
+                  child: AspectRatio(
+                    aspectRatio: 2 / 3,
+                    child: _buildDataWidget(snapshot.data!),
+                  ),
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return const AppCard(
+                alignment: Alignment.centerLeft,
+                onTap: null,
+                cornerRadius: 36,
+                child: SizedBox(
+                  width: 240,
+                  child: AspectRatio(
+                    aspectRatio: 2 / 3,
+                    child: Center(
+                      child: Text('An error occurred'),
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              return const CircularProgressIndicator();
+            }
+          },
+        ));
   }
 
   Widget _buildDataWidget(Atom element) {
@@ -62,10 +80,13 @@ class _ElementOfTheDayState extends State<ElementOfTheDay> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ElementCell(
-            size: Size(100, 140),
-            atom: element,
-            filterType: CellFilterType.normal,
+          Hero(
+            tag: element.name!,
+            child: ElementCell(
+              size: Size(100, 140),
+              atom: element,
+              filterType: CellFilterType.normal,
+            ),
           ),
           Text(
             element.summary ?? '',

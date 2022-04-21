@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:periodic_table/providers/app_settings.dart';
+import 'package:periodic_table/screens/element_list_sscreen.dart';
 import 'package:periodic_table/screens/periodic_table_screen.dart';
+import 'package:periodic_table/screens/search_page.dart';
 import 'package:periodic_table/utils/helpers.dart';
 import 'package:periodic_table/widgets/explore_card.dart';
 import 'package:periodic_table/widgets/element_of_the_day.dart';
@@ -34,18 +36,25 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               FadeIn(
-                delay: Duration(milliseconds: 500),
+                delay: const Duration(milliseconds: 500),
                 child: Searchbar(
-                  onSearchClick: _navigateToSearchPage,
+                  onSearchClick: () {
+                    print('SearchClicked');
+                    Navigator.of(context).push(
+                      buildPage(
+                        page: const SearchPage(),
+                      ),
+                    );
+                  },
                 ),
-                curve: Interval(0.5, 1, curve: Curves.fastOutSlowIn),
+                curve: const Interval(0.5, 1, curve: Curves.fastOutSlowIn),
               ),
-              FadeInSlider(
+              const FadeInSlider(
                 child: ElementOfTheDay(),
                 delay: Duration(milliseconds: 700),
               ),
               FadeIn(
-                delay: Duration(milliseconds: 900),
+                delay: const Duration(milliseconds: 900),
                 child: Padding(
                   padding: const EdgeInsets.only(
                     left: 24,
@@ -81,7 +90,7 @@ class HomePage extends StatelessWidget {
                       direction: FadeInSliderDirection.fromBottom,
                     ),
                     FadeInSlider(
-                      delay: Duration(milliseconds: 700),
+                      delay: const Duration(milliseconds: 700),
                       child: ExploreCard(
                         title: 'Element',
                         subtitle: 'List',
@@ -89,7 +98,8 @@ class HomePage extends StatelessWidget {
                           Navigator.push(
                             context,
                             buildPage(
-                              page: const PeriodicTableScreen(),
+                              page: const ElementListScreen(),
+                              type: PageTransitionType.slide,
                             ),
                           );
                         },
@@ -105,15 +115,6 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  void onElementList() {}
-
-  void _navigateToSearchPage() {
-    DateTime dateTime = DateTime.now();
-
-    //TODO: Navigate Search page
-    print('Navigate to search at ${dateTime.toIso8601String()}\n');
   }
 }
 

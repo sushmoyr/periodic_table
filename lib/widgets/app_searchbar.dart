@@ -9,11 +9,11 @@ class Searchbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
-      child: GestureDetector(
-        onTap: onSearchClick,
-        child: Material(
-          type: MaterialType.card,
-          color: elevatedSurfaceColor,
+      child: Material(
+        type: MaterialType.card,
+        color: elevatedSurfaceColor,
+        child: GestureDetector(
+          onTap: onSearchClick,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(

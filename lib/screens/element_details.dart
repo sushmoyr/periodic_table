@@ -16,7 +16,6 @@ class ElementDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     var headlineMedium = Theme.of(context).textTheme.headlineMedium;
     var headlineSmall = Theme.of(context).textTheme.headlineSmall;
-    var titleSmall = Theme.of(context).textTheme.titleSmall;
     var titleMedium = Theme.of(context).textTheme.titleMedium;
     var titleLarge = Theme.of(context)
         .textTheme
@@ -25,6 +24,7 @@ class ElementDetails extends StatelessWidget {
 
     return Scaffold(
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(
             horizontal: 16,
             vertical: MediaQuery.of(context).viewPadding.top + 16),
@@ -32,7 +32,7 @@ class ElementDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Hero(
                   tag: atom.name!,
@@ -45,7 +45,6 @@ class ElementDetails extends StatelessWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: SizedBox(
-                    height: elementCellSize.height,
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,21 +55,27 @@ class ElementDetails extends StatelessWidget {
                           style: headlineMedium!
                               .copyWith(color: hexToM3Color(atom.cpkHex)),
                         ),
-                        if (atom.appearance != null)
+                        if (atom.appearance != null) ...[
+                          verticalGap8,
                           Text(
                             '${atom.appearance?.toUpperCaseFirst()}',
                             style: titleLarge,
                           ),
-                        if (atom.category != null)
+                        ],
+                        if (atom.category != null) ...[
+                          verticalGap8,
                           Text(
                             '${atom.category?.toUpperCaseFirst()}',
                             style: titleMedium!
                                 .copyWith(fontWeight: FontWeight.w300),
                           ),
+                        ],
+                        verticalGap8,
                         Text(
                           'Number: ${atom.number}',
                           style: titleMedium,
                         ),
+                        verticalGap8,
                         Text(
                           'Atomic Mass: ${atom.atomicMass}',
                           style: titleMedium,

@@ -14,6 +14,7 @@ class AppCard extends StatelessWidget {
     this.fillColor,
     required this.child,
     this.alignment = Alignment.center,
+    this.onTap,
   }) : super(key: key);
 
   final AppCardType type;
@@ -21,12 +22,14 @@ class AppCard extends StatelessWidget {
   final Color? fillColor;
   final Widget child;
   final Alignment alignment;
+  final VoidCallback? onTap;
 
   factory AppCard.outlined({
     Key? key,
     double cornerRadius = 0,
     Color? fillColor,
     required Widget child,
+    VoidCallback? onTap,
   }) {
     return AppCard(
       key: key,
@@ -34,6 +37,7 @@ class AppCard extends StatelessWidget {
       cornerRadius: cornerRadius,
       fillColor: fillColor,
       child: child,
+      onTap: onTap,
     );
   }
 
@@ -46,10 +50,16 @@ class AppCard extends StatelessWidget {
           border: (type == AppCardType.outlined)
               ? Border.all(color: elementTextBorderColor)
               : null,
-          color: fillColor ?? Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(cornerRadius),
         ),
-        child: child,
+        child: Material(
+          child: InkWell(
+            onTap: onTap,
+            child: child,
+          ),
+          borderRadius: BorderRadius.circular(cornerRadius),
+          color: fillColor ?? Theme.of(context).cardColor,
+          clipBehavior: Clip.antiAlias,
+        ),
       ),
     );
   }
