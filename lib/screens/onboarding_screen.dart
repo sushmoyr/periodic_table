@@ -46,57 +46,81 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     loading = ValueNotifier(context.watch<AppSettings>().loading);
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ElementText(
-                    text: 'Periodic',
-                    letterSpacing: 1,
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 42, top: 8),
-                    child: ElementText(
-                      text: 'Table',
-                      style: Theme.of(context).textTheme.displaySmall,
-                      letterSpacing: 1,
+    return SafeArea(
+      child: LayoutBuilder(
+        builder: (ctx, constraints) {
+          double height = constraints.maxHeight;
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: SizedBox(
+                    height: height,
+                    child: Padding(
+                      // padding: EdgeInsets.zero,
+                      padding: EdgeInsets.only(
+                          left: 24.0,
+                          right: 24.0,
+                          top: 16.0,
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ElementText(
+                            text: 'Periodic',
+                            letterSpacing: 1,
+                            style: Theme.of(context).textTheme.displaySmall,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 42, top: 8),
+                            child: ElementText(
+                              text: 'Table',
+                              style: Theme.of(context).textTheme.displaySmall,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                          const Spacer(),
+                          // SizedBox(
+                          //     height:
+                          //         (MediaQuery.of(context).size.height - 240) / 3),
+                          TextField(
+                            controller: _textEditingController,
+                            enabled: !context.watch<AppSettings>().loading,
+                            decoration: InputDecoration(
+                                hintText: 'Enter Your name',
+                                errorText:
+                                    hasError ? 'Name Can not be empty' : null),
+                          ),
+                          const SizedBox(height: 16),
+                          Align(
+                            alignment: Alignment.center,
+                            child: ElevatedButton(
+                              onPressed: context.watch<AppSettings>().loading
+                                  ? null
+                                  : _handleSubmit,
+                              child: const Text('Set Name'),
+                            ),
+                          ),
+                          // SizedBox(
+                          //     height:
+                          //         (MediaQuery.of(context).size.height - 240) / 2),
+
+                          const Spacer(),
+                        ],
+                      ),
                     ),
                   ),
-                  const Spacer(),
-                  TextField(
-                    controller: _textEditingController,
-                    enabled: !context.watch<AppSettings>().loading,
-                    decoration: InputDecoration(
-                        hintText: 'Enter Your name',
-                        errorText: hasError ? 'Name Can not be empty' : null),
-                  ),
-                  const SizedBox(height: 16),
-                  Align(
-                    alignment: Alignment.center,
-                    child: ElevatedButton(
-                      onPressed: context.watch<AppSettings>().loading
-                          ? null
-                          : _handleSubmit,
-                      child: const Text('Set Name'),
-                    ),
-                  ),
-                  const Spacer(),
-                ],
-              ),
+                ),
+                (context.watch<AppSettings>().loading == true)
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Container(),
+              ],
             ),
-            (context.watch<AppSettings>().loading == true)
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : Container(),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
